@@ -77,12 +77,11 @@ window.onload = function () {
         if (!/^\w+$/.exec(usernameValue.value)) {
             usernameValue.style.border = '2px solid red';
             document.getElementById('inputs__username-error').classList.remove('hidden');
-           return
+            return
         } else {
             usernameValue.style.border = 'unset';
             document.getElementById('inputs__username-error').classList.add('hidden');
         }
-
 
 
         if (!/^[A-Za-z\s]+$/g.exec(fullNameValue.value)) {
@@ -113,8 +112,6 @@ window.onload = function () {
         }
 
 
-
-
         if (passwordValue.value !== document.getElementById('inputs__password-repeat').value) {
             alert('Passwords dont match');
             return;
@@ -141,7 +138,7 @@ window.onload = function () {
 
     function showCheckPopUp() {
         document.getElementById('input_check-popup').classList.remove('hidden');
-        document.getElementById('input_check-popup__button').addEventListener('click', ()=> {
+        document.getElementById('input_check-popup__button').addEventListener('click', () => {
             document.getElementById('input_check-popup').classList.add('hidden')
         })
 
@@ -159,6 +156,8 @@ window.onload = function () {
         formLink.innerText = "Don't have account yet";
     }
 
+// функция перехода к форме ргеистрации
+
     function changeToSignUp() {
         form.reset();
         for (let elem of hideElements) {
@@ -168,6 +167,15 @@ window.onload = function () {
         formButton.innerText = 'Sign Up'
         formLink.innerText = "Already have an account?";
     }
+
+    // функция перехода в Личный кабинет
+
+    function changeToAccount(username) {
+
+    }
+
+
+    // функция проверки значения на форме логина
 
     function checkSignInInputs() {
         if (!usernameValue.value) {
@@ -187,10 +195,51 @@ window.onload = function () {
         let usersDataBase = localStorage.getItem('clients');
 
         let userDataBaseArray = JSON.parse(usersDataBase);
-        console.log ('ls is converted')
-        console.log(userDataBaseArray);
+        userDataBaseArray.forEach((item) => {
+            if (usernameValue.value === JSON.parse(item).username && passwordValue.value === JSON.parse(item).password) {
+                console.log('user exist');
+                document.getElementById('form__title').innerText = "Welcome " + usernameValue.value;
+                document.getElementById('form__subtitle').classList.add('hidden');
+                // usernameValue.classList.add('hidden');
+                // passwordValue.classList.add('hidden');
+                // const labels = document.getElementsByTagName('label');
+                // labels.forEach(label => {
+                //     label.classList.add('hidden')
+                // });
+                document.getElementById('username_label').classList.add('hidden');
+                document.getElementById('password_label').classList.add('hidden');
+                document.getElementById('agree_label').style.display = 'hidden'
+                document.getElementById('agree_label').classList.add('hidden');
 
-        alert("Добро пожаловать " + usernameValue.value)
+                formButton.innerText = "Exit"
+                formButton.addEventListener('click', (event) => {
+                        changeToSignUp()
+                    }
+                )
+                return;
+
+            } else {
+                if (usernameValue.value === JSON.parse(item).username) {
+                    passwordValue.style.border = '2px solid red';
+                    document.getElementById('inputs__password-error').innerText = 'Incorrect password';
+                    document.getElementById('inputs__password-error').classList.remove('hidden');
+
+                }
+                if (passwordValue.value === JSON.parse(item).password) {
+                    usernameValue.style.border = '2px solid red';
+                    document.getElementById('inputs__username-error').innerText = 'No such user';
+                    document.getElementById('inputs__username-error').classList.remove('hidden');
+
+                }
+
+                //
+                // passwordValue.style.border = '2px solid red';
+                // usernameValue.style.border = '2px solid red';
+
+            }
+        })
+
+
     }
 
 
@@ -217,10 +266,6 @@ window.onload = function () {
     }
 
 
-
-
-
-
 // по клику запускает проверку на ввод полей значений
 
     formButton.addEventListener('click', (event) => {
@@ -229,16 +274,19 @@ window.onload = function () {
             if (checkSignUpInputs()) {
                 showPopUp();
                 const userData = new FormData(form);
-                let userDataObj =(Object.fromEntries(userData.entries()));
+                let userDataObj = (Object.fromEntries(userData.entries()));
                 // console.log(userDataObj);
                 let clients = localStorage.getItem('clients');
                 if (!clients) {
                     // console.log('local storage is empty')
-                      localStorage.setItem('clients',  JSON.stringify(userDataObj))
+                    let clientsArray = []
+                    clientsArray.push(JSON.stringify(userDataObj))
+                    console.log(clientsArray)
+                    localStorage.setItem('clients', JSON.stringify(clientsArray))
                 } else {
-                    let clientsArray = [JSON.parse(clients)];
-                    // console.log(clientsArray);
-                    clientsArray.push(userDataObj);
+                    let clientsArray = JSON.parse(clients);
+                    console.log(clientsArray);
+                    clientsArray.push(JSON.stringify(userDataObj));
                     localStorage.setItem('clients', JSON.stringify(clientsArray));
                 }
             }

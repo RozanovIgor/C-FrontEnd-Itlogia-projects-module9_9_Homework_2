@@ -15,14 +15,14 @@
     <div class="container__left">
     <form action="" class="form" id="form">
         <h1 class="form__title" id="form__title">Get your free account</h1>
-        <h2 class="form__subtitle">Try homeWorks BUSINESS free for 15 days. Downgrade to Basic (Free Forever)
+        <h2 class="form__subtitle" id="form__subtitle">Try homeWorks BUSINESS free for 15 days. Downgrade to Basic (Free Forever)
             anytime.</h2>
         <div class="inputs">
             <label class="inputs__label hide" for="inputs__name">Full Name
                 <input type="text" class="input" id = "inputs__name" name="name">
                 <small class="input_error hidden" id="inputs__name-error">Only letters or space</small>
             </label>
-            <label class="inputs__label" for="inputs__username">Your username
+            <label class="inputs__label" for="inputs__username" id="username_label">Your username
                 <input type="text" class="input" id="inputs__username" name="username">
                 <small class="input_error hidden" id="inputs__username-error">Only letters, digits, "_","-"</small>
             </label>
@@ -30,7 +30,7 @@
                 <input type="email" class="input" id="inputs__email" name="email">
                 <small class="input_error hidden" id="inputs__email-error">incorrect email format</small>
             </label>
-            <label class="inputs__label" for="inputs__password">Password
+            <label class="inputs__label" for="inputs__password" id="password_label">Password
                 <input type="password" class="input" id="inputs__password" name="password" >
                 <small class="input_error hidden" id="inputs__password-error">min 8 symbols, 1 capital letter, 1 digit, 1 special symbol</small>
             </label>
@@ -39,7 +39,7 @@
                 <small class="input_error hidden" id="inputs__password-repeat-error">min 8 symbols, 1 capital letter, 1 digit, 1 special symbol</small>
             </label>
 
-            <label class="inputs__agree-label hide">
+            <label class="inputs__agree-label hide" id="agree_label">
                 <input type="checkbox" class="inputs__agree" id="inputs_agree-checkbox" name="agree">
                 Agree to our Terms of Service and Privacy Statement
                 <small class="input_error hidden" id="inputs_agree">You must agree with our terms</small>
@@ -74,21 +74,7 @@
     <div class="popup__text">На вашу почту выслана ссылка, перейдите по ней, чтобы завершить регистрацию</div>
     <button class="button popup__button" id="popup__button">Ок</button>
 </div>
-<div class="check-popup hidden" id="input_check-popup">
 
-    <div class="check-popup__text">Введенные даннеые должны соотвествовать требованиям <br>
-        Full Name может содержать только буквы и пробел<br>
-        Your username - может содержать только буквы, цифры, символ подчеркивания и тире<br>
-        Введенный E-mail должен быть корректным<br>
-        Поле пароля должно содержать минимум 8 символов, среди которых есть:<br>
-        - хотя бы одна буква в верхнем регистре<br>
-        - хотя бы одна цифра<br>
-        - хотя бы один спецсимвол<br>
-        Password и Repeat Password должны совпадать<br>
-        Пользователь должен согласиться с условиями
-    </div>
-    <button class="button popup__button" id="input_check-popup__button">Ок</button>
-</div>
 
 
 <script src="scripts/scripts2.js"></script>
