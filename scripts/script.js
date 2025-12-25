@@ -1,18 +1,15 @@
 window.onload = function () {
 
-    let fullNameValue = document.getElementById('inputs__name');
-    let usernameValue = document.getElementById('inputs__username');
-    let emailValue = document.getElementById('inputs__email')
-    let agreeValue = document.getElementById('inputs_agree-checkbox');
-    let inputsValue = document.querySelectorAll('input');
-    let formButton = document.getElementById('form__submit');
-    let passwordValue = document.getElementById('inputs__password');
-    let popup = document.getElementById('popup');
-    let circles = document.getElementsByClassName('circle');
-    let formLink = document.getElementById('form__already')
-    let hideElements = document.getElementsByClassName('hide');
-    let curtain = document.getElementById('curtain');
-    let formTitle = document.getElementById('form__title');
+    const usernameValue = document.getElementById('inputs__username');
+    const inputsValue = document.querySelectorAll('input');
+    const formButton = document.getElementById('form__submit');
+    const passwordValue = document.getElementById('inputs__password');
+    const popup = document.getElementById('popup');
+    const circles = document.getElementsByClassName('circle');
+    const formLink = document.getElementById('form__already')
+    const hideElements = document.getElementsByClassName('hide');
+    const curtain = document.getElementById('curtain');
+    const formTitle = document.getElementById('form__title');
     const regexpArray = [
         /^\w+$/,
         /^[A-Za-z\s]+$/g,
@@ -113,15 +110,16 @@ window.onload = function () {
 
                 const userData = new FormData(form);
                 let userDataObj = (Object.fromEntries(userData.entries()));
-                let clients = localStorage.getItem('clients');
+
                 if (!clients) {
+
                     let clientsArray = []
                     clientsArray.push(JSON.stringify(userDataObj))
                     localStorage.setItem('clients', JSON.stringify(clientsArray))
                     showPopUp();
                 } else {
+                    let clients = localStorage.getItem('clients');
                     let clientsArray = JSON.parse(clients);
-
                     for  (let i = 0; i < clientsArray.length; i++) {
                         if (clientsArray[i].username === userDataObj.username) {
                             console.log('user exist')
@@ -135,12 +133,10 @@ window.onload = function () {
                     console.log('clientsArray', clientsArray);
 
                 }
-            } else {
-                checkSignInInputs()
-
-
-
             }
+
+        } else {
+            checkSignInInputs()
         }
     })
 

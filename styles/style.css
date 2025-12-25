@@ -1,6 +1,6 @@
 @font-face {
     font-family: Nunito;
-    src: url("../fonts/Nunito/Nunito-ExtraBold.ttf");
+    src: url("../assets/fonts/Nunito/Nunito-ExtraBold.ttf");
     font-weight: 700;
 }
 
@@ -17,8 +17,10 @@
     justify-content: center;
     position: relative;
     min-height: 100vh;
-    background-color: #DD3142;
-}
+    background: #FFFFFF;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 1) 50%, rgba(248, 248, 250, 1) 50%);
+
+    }
 
 .logo {
     position: absolute;
