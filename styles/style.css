@@ -17,7 +17,6 @@
     justify-content: center;
     position: relative;
     min-height: 100vh;
-    background: #FFFFFF;
     background: linear-gradient(90deg, rgba(255, 255, 255, 1) 50%, rgba(248, 248, 250, 1) 50%);
 
     }
@@ -28,8 +27,6 @@
     left: 50%;
     transform: translateX(-140px);
     font-family: 'Nunito', sans-serif;
-    /*font-style: normal;*/
-    /*font-weight: 700;*/
     font-size: 36px;
     text-transform: uppercase;
     color: #000000;
@@ -119,7 +116,7 @@ input {
 }
 
 .input_error {
-    margin-top: -40px;
+    margin-top: -15px;
     color: red;
 }
 

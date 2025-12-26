@@ -19,6 +19,8 @@ window.onload = function () {
 
     function validateRegexp(regexps, values) {
         let check = 0;
+        console.log(`значения полей ${values}`);
+        // тут проверяем поля на регулярки
         for (i = 0; i < regexps.length; i++) {
             if (!regexps[i].exec(values[i].value)) {
                 // console.log(values[i].nextElementSibling);
@@ -26,10 +28,12 @@ window.onload = function () {
                 check += 1
             }
             console.log(check)
+            // тут проверка на совпадение паролей
             if (!(values[3].value === values[4].value)) {
                 check += 1
                 values[4].nextElementSibling.classList.remove('hidden')
             }
+
         }
         return check
     }
@@ -110,7 +114,7 @@ window.onload = function () {
 
                 const userData = new FormData(form);
                 let userDataObj = (Object.fromEntries(userData.entries()));
-
+                let clients = localStorage.getItem('clients');
                 if (!clients) {
 
                     let clientsArray = []
@@ -118,16 +122,16 @@ window.onload = function () {
                     localStorage.setItem('clients', JSON.stringify(clientsArray))
                     showPopUp();
                 } else {
-                    let clients = localStorage.getItem('clients');
-                    let clientsArray = JSON.parse(clients);
-                    for  (let i = 0; i < clientsArray.length; i++) {
-                        if (clientsArray[i].username === userDataObj.username) {
-                            console.log('user exist')
-                            changeToSignIn();
+
+                    const clientsArray = JSON.parse(clients);
+                    // for  (let i = 0; i < clientsArray.length; i++) {
+                    //     if (clientsArray[i].username === userDataObj.username) {
+                    //         console.log('user exist')
+                            // changeToSignIn();
                             /// почему то цикл не находит пользователя в базе
 
-                        }
-                    }
+                        // }
+                    // }
                     clientsArray.push(JSON.stringify(userDataObj));
                     localStorage.setItem('clients', JSON.stringify(clientsArray));
                     console.log('clientsArray', clientsArray);
