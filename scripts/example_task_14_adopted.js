@@ -25,6 +25,8 @@ window.onload = function () {
     const link = document.getElementById('form__already');
     const title = document.getElementById('form__title');
     const button = document.getElementById('form__submit');
+    const usernameValue = document.getElementById('inputs__username');
+    const passwordValue = document.getElementById('inputs__password');
 
 
     // 1 страница: Регистрация
@@ -153,11 +155,15 @@ window.onload = function () {
         }
     }
 
-    // Проверка на чекбокс
+    // Проверка на чекбокс - тут пришлось костылить тк где то сбрасываются все сообщения об ошибке и обнуляется текст внутри тега small
     function isUserAgreed(checkbox) {
+        // console.log(checkbox);
+        // console.log(checkbox.nextElementSibling);
         checkbox.nextElementSibling.classList.add('hidden');
         if (!checkbox.checked) {
             checkbox.nextElementSibling.classList.remove('hidden');
+            checkbox.nextElementSibling.style.display = 'block';
+            checkbox.nextElementSibling.innerText = 'You must agree with our terms'
             hasError = true;
         }
     }
@@ -196,7 +202,9 @@ window.onload = function () {
             window.location.reload(); // При нажатии на ссылку «Registration» страница должна просто перезагружаться
         };
 
-        form.onsubmit = ((e) => { // Заменить слушатель события для кнопки «Sign In»
+        form.onsubmit = ((e) => {// Заменить слушатель события для кнопки «Sign In»
+
+
             e.preventDefault();
 
             removeFormFieldErrors();
@@ -209,23 +217,45 @@ window.onload = function () {
                 }
             }
 
-            if (!hasError) { // Если оба поля заполнены
+            if (hasError) { // Если оба поля заполнены
+                console.log(findUserAndPassword('clients', usernameValue.value, passwordValue.value));
                 let clients = localStorage.getItem('clients');
-                let userNameIndex = clients.indexOf(`"userName":"${signInInputs[0].value}"`); // проверять, если ли пользователь с таким логином в массиве clients в Local Storage
+                let clientsArray = JSON.parse(clients);
 
-                if (~userNameIndex) {
-                    signInInputs[0].parentElement.style.borderBottomColor = '#C6C6C4';
-                    let client = JSON.parse(clients.slice(clients.lastIndexOf('{', userNameIndex), clients.indexOf('}', userNameIndex) + 1));
+                clientsArray.forEach((clientsItem) => {
 
-                    if (client.password === signInInputs[1].value) { // если пользователь найден и пароль введен верно
-                        signInInputs[1].parentElement.style.borderBottomColor = '#C6C6C4';
-                        moveToPersonalAccount(client); // имитация перехода в личный кабинет
+                    if (usernameValue.value === clientsItem.userName && passwordValue.value === clientsItem.password) {
+
+                        moveToPersonalAccount(clientsItem);
                     } else {
-                        showSignInError(signInInputs[1], 'Неверный пароль');
+                        if (usernameValue.value === clientsItem.username) {
+                            passwordValue.style.border = '2px solid red';
+                            document.getElementById('inputs__password-error').innerText = 'Incorrect password';
+                            document.getElementById('inputs__password-error').classList.remove('hidden');
+
+                        }
+                        if (passwordValue.value === clientsItem.password) {
+                            usernameValue.style.border = '2px solid red';
+                            document.getElementById('inputs__username-error').innerText = 'No such user';
+                            document.getElementById('inputs__username-error').classList.remove('hidden');
+                        }
                     }
-                } else {
-                    showSignInError(signInInputs[0], 'Такой пользователь не зарегистрирован');
-                }
+                })
+
+                // if (~userNameIndex) {
+                //
+                //     signInInputs[0].parentElement.style.borderBottomColor = '#C6C6C4';
+                //     let client = JSON.parse(clients.slice(clients.lastIndexOf('{', userNameIndex), clients.indexOf('}', userNameIndex) + 1));
+                //
+                //     if (client.password === signInInputs[1].value) { // если пользователь найден и пароль введен верно
+                //         signInInputs[1].parentElement.style.borderBottomColor = '#C6C6C4';
+                //         moveToPersonalAccount(client); // имитация перехода в личный кабинет
+                //     } else {
+                //         showSignInError(signInInputs[1], 'Неверный пароль');
+                //     }
+                // } else {
+                //     showSignInError(signInInputs[0], 'Такой пользователь не зарегистрирован');
+                // }
 
             }
 
@@ -250,8 +280,34 @@ window.onload = function () {
         form.onclick = () => {
             window.location.reload();
         }
-        form.previousElementSibling.remove(); // Текст под заголовкой удалить
-        form.innerHTML = ''; // поля Username и Password, ссылку "Registration" удалить
+        document.querySelectorAll('label').forEach((elem) => {
+            elem.classList.add('hidden');
+        })
+        document.getElementById('form__subtitle').classList.add('hidden');
+        link.classList.add('hidden');
+
         form.appendChild(button.parentElement);
+    }
+
+    function findUserAndPassword(LSitem, userName, password) {
+        let userExists = false;
+        let passwordCorrect = false;
+        let validationResult = [];
+        let clientsArray = JSON.parse(localStorage.getItem(LSitem));
+        const user = clientsArray.find((client) => client.userName === userName);
+
+        if  (user) {
+          userExists = true;
+          validationResult.push(userExists);
+          if (user.password === password) {
+              passwordCorrect = true;
+              validationResult.push(passwordCorrect);
+          } else {
+              validationResult.push(passwordCorrect);
+          }
+        } else {
+            validationResult.push(userExists);
+        }
+        return validationResult;
     }
 }
