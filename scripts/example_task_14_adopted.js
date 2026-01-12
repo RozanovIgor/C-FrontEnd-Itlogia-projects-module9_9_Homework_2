@@ -218,44 +218,27 @@ window.onload = function () {
             }
 
             if (hasError) { // Если оба поля заполнены
-                console.log(findUserAndPassword('clients', usernameValue.value, passwordValue.value));
-                let clients = localStorage.getItem('clients');
-                let clientsArray = JSON.parse(clients);
+                let validationResult = findUserAndPassword('clients', usernameValue.value, passwordValue.value)
 
-                clientsArray.forEach((clientsItem) => {
 
-                    if (usernameValue.value === clientsItem.userName && passwordValue.value === clientsItem.password) {
+                if (validationResult[0] === true && validationResult[1] === true) {
 
-                        moveToPersonalAccount(clientsItem);
-                    } else {
-                        if (usernameValue.value === clientsItem.username) {
-                            passwordValue.style.border = '2px solid red';
-                            document.getElementById('inputs__password-error').innerText = 'Incorrect password';
-                            document.getElementById('inputs__password-error').classList.remove('hidden');
+                    moveToPersonalAccount(validationResult[2]);
+                } else {
+                    if (validationResult[1] === false) {
+                        passwordValue.style.border = '2px solid red';
+                        document.getElementById('inputs__password-error').innerText = 'Incorrect password';
+                        document.getElementById('inputs__password-error').classList.remove('hidden');
+                        document.getElementById('inputs__password-error').style.display = 'block';
 
-                        }
-                        if (passwordValue.value === clientsItem.password) {
-                            usernameValue.style.border = '2px solid red';
-                            document.getElementById('inputs__username-error').innerText = 'No such user';
-                            document.getElementById('inputs__username-error').classList.remove('hidden');
-                        }
                     }
-                })
-
-                // if (~userNameIndex) {
-                //
-                //     signInInputs[0].parentElement.style.borderBottomColor = '#C6C6C4';
-                //     let client = JSON.parse(clients.slice(clients.lastIndexOf('{', userNameIndex), clients.indexOf('}', userNameIndex) + 1));
-                //
-                //     if (client.password === signInInputs[1].value) { // если пользователь найден и пароль введен верно
-                //         signInInputs[1].parentElement.style.borderBottomColor = '#C6C6C4';
-                //         moveToPersonalAccount(client); // имитация перехода в личный кабинет
-                //     } else {
-                //         showSignInError(signInInputs[1], 'Неверный пароль');
-                //     }
-                // } else {
-                //     showSignInError(signInInputs[0], 'Такой пользователь не зарегистрирован');
-                // }
+                    if (validationResult[0] === false) {
+                        usernameValue.style.border = '2px solid red';
+                        document.getElementById('inputs__username-error').innerText = 'No such user';
+                        document.getElementById('inputs__username-error').classList.remove('hidden');
+                        document.getElementById('inputs__username-error').style.display = 'block';
+                    }
+                }
 
             }
 
@@ -289,25 +272,27 @@ window.onload = function () {
         form.appendChild(button.parentElement);
     }
 
-    function findUserAndPassword(LSitem, userName, password) {
+    function findUserAndPassword(LSitem, userName, password) { // принимает ключ LocalStorage возвращает итоги проверки на username и password и объект user если проверка прошла
+
         let userExists = false;
         let passwordCorrect = false;
         let validationResult = [];
         let clientsArray = JSON.parse(localStorage.getItem(LSitem));
         const user = clientsArray.find((client) => client.userName === userName);
 
-        if  (user) {
-          userExists = true;
-          validationResult.push(userExists);
-          if (user.password === password) {
-              passwordCorrect = true;
-              validationResult.push(passwordCorrect);
-          } else {
-              validationResult.push(passwordCorrect);
-          }
+        if (user) {
+            userExists = true;
+            validationResult.push(userExists);
+            if (user.password === password) {
+                passwordCorrect = true;
+                validationResult.push(passwordCorrect);
+            } else {
+                validationResult.push(passwordCorrect);
+            }
         } else {
             validationResult.push(userExists);
         }
+        validationResult.push(user); // добавляем объект с данными пользователя для дальнейшего использования
         return validationResult;
     }
 }
